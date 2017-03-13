@@ -59,15 +59,14 @@ class SQLAlchemyConnection(object):
 		"""Prepare a sqlalchemy session on the WebCore context"""
 		
 		# Assign the session factory to our database alias.
-		context.db[self.alias] = self.Session
+		context.db[self.alias] = self.Session()
 	
 	def done(self, context):
 		"""Close and clean up the request local session, if any."""
 		
-		context.db[self.alias].remove()
+		context.db[self.alias].close()
 	
 	def stop(self, context):
 		"""Disconnect any hanging connections in the pool."""
 		
 		self.engine.dispose()
-
